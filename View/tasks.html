@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StudEase — Tasks</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="tasks-page">
+
+    <!-- Background -->
+    <div class="homeBg-full" aria-hidden></div>
+
+    <!-- App Layout -->
+    <div class="app-wrap">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="brand">StudEase</span>
+            </div>
+
+            <nav class="nav">
+                <a href="homePage.html">Home</a>
+                <a href="friends.html">Friends</a>
+                <a href="groups.html">Groups</a>
+                <a href="courses.html">Courses</a>
+                <a href="tasks.html" class="active">Tasks</a>
+                <a href="profile.html">Account</a>
+            </nav>
+
+            <div class="user-name"></div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="tasks-container">
+
+            <!-- Top Bar -->
+            <div class="tasks-topbar">
+                <div class="tabs">
+                    <button class="tab active">All</button>
+                    <button class="tab">Today</button>
+                    <button class="tab">This Week</button>
+                </div>
+
+                <button class="add-task-btn" id="openFormBtn">+ Add Task</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <p>Total Tasks</p>
+                    <h2 id="totalCount">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Pending</p>
+                    <h2 id="pendingCount">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p>Completed</p>
+                    <h2 id="completedCount">0</h2>
+                </div>
+            </div>
+
+            <!-- Pending Tasks -->
+            <section class="task-section">
+                <h3>Pending Tasks</h3>
+                <div id="pendingList" class="task-list"></div>
+            </section>
+
+            <!-- Completed Tasks -->
+            <section class="task-section">
+                <h3>Completed Tasks</h3>
+                <div id="completedList" class="task-list"></div>
+            </section>
+
+        </main>
+
+        <!-- Add Task Modal -->
+        <div class="modal" id="taskModal">
+            <div class="modal-content">
+                <h2>Add Task</h2>
+
+                <label>Task Name:</label>
+                <input type="text" id="taskName" placeholder="Enter task name..." />
+
+                <label>Due Date:</label>
+                <input type="date" id="taskDate" />
+
+                <div class="modal-actions">
+                    <button id="addTaskBtn">Add</button>
+                    <button id="closeFormBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

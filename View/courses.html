@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StudEase — Courses</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="courses-page">
+
+    <div class="homeBg-full" aria-hidden></div>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="brand">StudEase</span>
+            </div>
+            <nav class="nav">
+                <a href="homePage.html">Home</a>
+                <a href="friends.html">Friends</a>
+                <a href="groups.html">Groups</a>
+                <a href="courses.html" class="active">Courses</a>
+                <a href="tasks.html">Tasks</a>
+                <a href="profile.html">Account</a>
+            </nav>
+            <div class="user-name"></div>
+        </aside>
+
+        <main class="courses-container">
+            <div class="courses-topbar">
+                <h2>My Courses</h2>
+                <button class="add-course-btn" id="openCourseModalBtn">+ Add Course</button>
+            </div>
+
+            <div id="coursesGrid" class="courses-grid">
+            </div>
+        </main>
+
+        <div class="modal" id="courseModal">
+            <div class="modal-content">
+                <h2>Add New Course</h2>
+
+                <label>Course Name:</label>
+                <input type="text" id="courseName" placeholder="e.g., Calculus, Python..." required />
+
+                <div class="modal-actions">
+                    <button id="addCourseBtn">Add</button>
+                    <button id="closeCourseModalBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

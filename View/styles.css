@@ -1,0 +1,1057 @@
+/* ----------------------------------------------
+   GLOBAL VARIABLES / RESET
+---------------------------------------------- */
+:root {
+  --bg-1: #05021a;
+  --bg-2: #0a0730;
+  --glass: rgba(255, 255, 255, 0.07);
+  --glass-soft: rgba(255, 255, 255, 0.04);
+  --muted: rgba(255, 255, 255, 0.85);
+  --muted-2: rgba(255, 255, 255, 0.7);
+  --accent: #8b5cf6;
+  --accent-2: #3b82f6;
+  --radius: 14px;
+  --max-width: 1200px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+/* ----------------------------------------------
+   BODY DEFAULT STYLES
+---------------------------------------------- */
+body {
+  color: var(--muted);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------
+   HERO / WELCOME PAGE
+---------------------------------------------- */
+.page-index {
+  position: relative;
+  min-height: 100vh;
+}
+
+.bg-full {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-full img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.72);
+  transform: scale(1.03);
+}
+
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(20, 20, 40, 0.55),
+      rgba(60, 10, 80, 0.55));
+}
+
+.main {
+  position: relative;
+  z-index: 2;
+  /* فوق الخلفية */
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1.title {
+  font-size: 54px;
+  margin-bottom: 14px;
+}
+
+p.lead {
+  font-size: 20px;
+  max-width: 900px;
+  margin: 0 auto 28px;
+  color: var(--muted-2);
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(140, 92, 246, 0.15);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+}
+
+/* ----------------------------------------------
+   AUTH PAGES (LOGIN / SIGNUP)
+---------------------------------------------- */
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #4a1f80, #7a5ce1);
+  color: #fff;
+}
+
+.auth-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+}
+
+.auth-card {
+  background: rgba(250, 249, 250, 0.31);
+  border-radius: 20px;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.auth-subtitle {
+  font-size: 15px;
+  margin-bottom: 24px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  color: #030303;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: var(--accent);
+  background: rgba(248, 245, 245, 0.28);
+  outline: none;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  justify-content: center;
+}
+
+.btn-link {
+  background: transparent;
+  color: #fff;
+  text-decoration: underline;
+  padding: 14px 24px;
+  border-radius: 16px;
+  font-size: 18px;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 50px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(140, 92, 246, 0.3);
+}
+
+/* ----------------------------------------------
+   HOMEPAGE / DASHBOARD
+---------------------------------------------- */
+.homeBg-full {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background-color: rgba(253, 253, 253, 0.763);
+}
+
+.home-page .app-wrap {
+  display: flex;
+  min-height: 100vh;
+}
+
+/*linear-gradient(180deg, var(--bg-1), var(--bg-2));*/
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  padding: 24px;
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, #5b2997, #896be8);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
+  border-radius: 5px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.logo-box {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 24px;
+  color: white;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nav a {
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  color: white;
+  transition: background 0.3s;
+}
+
+.nav a.active,
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* User name at bottom */
+.user-name {
+  margin-top: auto;
+  font-weight: 600;
+  color: white;
+  padding-top: 20px;
+}
+
+/* Main content */
+.home-page .main {
+  margin-left: 260px;
+  padding: 20px 40px;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.topnav {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  color: rgb(13, 13, 13);
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 24px;
+  border-radius: 14px;
+  color: rgb(2, 2, 2);
+}
+
+/* ----------------------------------------------
+  Tasks Page
+---------------------------------------------- */
+/* ====== GENERAL PAGE LAYOUT ====== */
+
+.tasks-page {
+  background-color: rgba(253, 253, 253, 0.763);
+  color: #333333;
+  /* إضافة هذا السطر: لون نص داكن */
+  font-family: "Poppins", sans-serif;
+}
+
+/* 2. إصلاح الهامش والطبقات */
+.tasks-container {
+  flex: 1;
+  padding: 30px;
+  margin-left: 260px;
+  /* تعديل من 230px إلى 260px ليتطابق مع عرض السايدبار */
+  position: relative;
+  /* ضروري للتحكم بالطبقات */
+  z-index: 10;
+  /* لضمان ظهور المحتوى فوق الخلفية */
+}
+
+
+/* ====== TOP BAR ====== */
+
+.tasks-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.tabs {
+  display: flex;
+  gap: 12px;
+}
+
+.tab {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+  font-weight: bold;
+}
+
+.tab.active {
+  background: #7a5ce1;
+  color: white;
+  border-color: #7a5ce1;
+  font-weight: bold;
+}
+
+
+/* Add Task Button */
+.add-task-btn {
+  background: #4a1f80;
+  color: white;
+  border: none;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-task-btn:hover {
+  background: #3c1768;
+}
+
+
+/* ====== STATS CARDS ====== */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  text-align: center;
+}
+
+.stat-card p {
+  margin: 0;
+  color: #555;
+}
+
+.stat-card h2 {
+  margin-top: 8px;
+  font-size: 32px;
+  color: #4a1f80;
+}
+
+
+/* ====== TASK LIST SECTIONS ====== */
+
+.task-section {
+  margin-bottom: 35px;
+}
+
+.task-section h3 {
+  margin-bottom: 10px;
+  color: #4a1f80;
+}
+
+.task-list {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ====== INDIVIDUAL TASK ITEM ====== */
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-info span {
+  font-size: 15px;
+}
+
+.task-date {
+  font-size: 13px;
+  color: #777;
+}
+
+.task-check {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+
+/* ====== MODAL (ADD TASK FORM) ====== */
+
+.modal {
+  background: rgba(250, 249, 250, 0.31);
+  border-radius: 20px;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+
+  width: 400px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-top: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  color: #030303;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #4a1f80;
+}
+
+.modal-content label {
+  font-size: 14px;
+  margin-top: 10px;
+  display: block;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.modal-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#addTaskBtn {
+
+
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 50px;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+
+}
+
+#closeFormBtn {
+  background: #ccc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ==================================== */
+/* 5. COURSES PAGE STYLES */
+/* ==================================== */
+
+.courses-page {
+  background-color: rgba(253, 253, 253, 0.763);
+  color: #333333;
+  font-family: "Poppins", sans-serif;
+
+}
+
+/* تخطيط محتوى صفحة الكورسات */
+.courses-container {
+  flex-grow: 1;
+  padding: 30px;
+  margin-left: 260px;
+  overflow-y: auto;
+  z-index: 10;
+  flex: 1;
+  position: relative;
+}
+
+/* شريط العنوان وزر الإضافة */
+.courses-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
+
+.courses-topbar h2 {
+  font-size: 40px;
+  color: var(--color-primary);
+}
+
+/* زر إضافة الكورس */
+.add-course-btn {
+  background: #4a1f80;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.2s;
+  margin-right: 20px;
+}
+
+.add-course-btn:hover {
+  background: #3c1768;
+}
+
+
+/* ------------------------------------ */
+/* شبكة وبطاقات الكورسات */
+/* ------------------------------------ */
+
+.courses-grid {
+  display: grid;
+  /* عرض 3 كورسات في الصف الواحد على الأجهزة الكبيرة */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+/* تصميم بطاقة الكورس */
+.course-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  /* لإزالة خط الرابط */
+  color: var(--color-text);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* أيقونة الكورس (النقطة الملونة) */
+.course-icon {
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-secondary);
+  /* استخدم لون افتراضي */
+  border-radius: 50%;
+  
+}
+
+.course-card h4 {
+  font-size: 24px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  color: var(--color-heading);
+}
+
+.course-card p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin: 3px 0;
+}
+
+
+/* ------------------------------------ */
+/* مودال إضافة الكورس (نفس تصميم مودال المهام) */
+/* ------------------------------------ */
+
+#courseModal .modal-content {
+  /* يمكنك نسخ تصميم modal-content هنا إذا كان مختلفًا عن تصميم modal المهام */
+  max-width: 450px;
+}
+#addCourseBtn{
+ background: var(--accent);
+  color: #fff;
+  padding: 14px 50px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+#closeCourseModalBtn{
+   background: #ccc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ==================================== */
+/* 6. COURSE DETAILS PAGE STYLES */
+/* ==================================== */
+
+.details-page {
+  background-color: rgba(253, 253, 253, 0.763);
+  color: #333333;
+  font-family: "Poppins", sans-serif;
+}
+.course-details-container{
+ flex-grow: 1;
+  padding: 30px;
+  margin-left: 260px;
+  overflow-y: auto;
+  z-index: 10;
+  flex: 1;
+  position: relative;
+}
+.details-topbar {
+    margin-bottom: 30px;
+}
+
+.details-topbar h2 {
+    font-size: 32px;
+    color: #4a1f80;
+    margin-top: 10px;
+}
+
+.back-btn {
+    color: #7a5ce1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.back-btn:hover {
+    color: #4a1f80;
+}
+
+/* تخطيط الأقسام الرئيسية (المشاريع/الاختبارات/الدرجات) */
+.course-sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* عمودان متساويان */
+    gap: 20px;
+}
+
+.details-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.details-card h3 {
+    color: #4a1f80;
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.full-width-card {
+    grid-column: 1 / -1; /* لجعل بطاقة الدرجات تأخذ العرض الكامل */
+}
+
+.add-item-btn {
+    width: auto;
+    padding: 8px 15px;
+    border: 1px  #7a5ce1;
+    background: #f7f3ff;
+    color: #7a5ce1;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: block;
+    margin-left: auto;
+}
+
+.add-item-btn:hover {
+    background: #e9e2f8;
+}
+
+.course-task-modal { /* 💡 تم إضافة الكلاس الجديد هنا */
+  background: rgba(250, 249, 250, 0.31);
+  border-radius: 20px;
+  padding: 36px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.course-task-content { /* 💡 إضافة تنسيق المحتوى هنا */
+  width: 400px;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-top: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 16px;
+  color: #030303;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+.course-task-content input[type="text"],
+.course-task-content input[type="date"] {
+  width: 100%; /* ضروري لملء العرض */
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 15px; 
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; 
+  font-size: 14px;
+}
+.course-task-actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+#saveCourseTaskBtn{
+  background: var(--accent);
+  color: #fff;
+  padding: 14px 50px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+#closeCourseTaskModalBtn{
+  background: #ccc;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ------------------------------------ */
+/* 7. COURSE TASK LIST STYLES - عرض الشريط الرفيع */
+/* ------------------------------------ */
+
+/* الحاوية (مصفوفة المشاريع/الاختبارات) */
+.tasks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* التنسيق الجديد للشريط الرفيع */
+.task-strip {
+    /* تصميم أساسي كبطاقة */
+    background: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* 🛑 التعديل الأهم: تنسيق Flexbox للعمل مع البنية الجديدة */
+    display: flex;
+    justify-content: space-between; /* لدفع العنوان إلى اليسار والبيانات الوصفية إلى اليمين */
+    align-items: center;
+    border-left: 5px solid;
+}
+
+.task-strip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* تنسيق اسم المهمة */
+.task-title-strip {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    /* 💡 السماح للعنوان بأن يشغل المساحة المتبقية إذا كان طويلاً */
+    flex-grow: 1; 
+    /* لضمان محاذاة جيدة مع العناصر المجاورة */
+    align-self: center;
+}
+
+/* تنسيق البيانات الوصفية (التاريخ والحالة) */
+.task-metadata-strip {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.task-date-strip {
+    font-size: 14px;
+    color: #777;
+}
+
+/* تنسيق شارة الحالة (Badge) */
+.task-status-badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-pending {
+    background: #eef2ff; /* خلفية زرقاء فاتحة */
+    color: #4f46e5; /* نص أزرق غامق */
+}
+
+.status-completed {
+    background: #ecfdf5; /* خلفية خضراء فاتحة */
+    color: #059669; /* نص أخضر غامق */
+}
+
+
+/* تحديد لون الشريط الجانبي لكل نوع */
+.project-item {
+    border-left-color: #8b5cf6; /* بنفسجي للمشاريع */
+}
+
+.exam-item {
+    border-left-color: #f59e0b; /* برتقالي للاختبارات */
+}
+/* تنسيق نص العنوان عند الإنجاز */
+.task-title-strip.completed-text {
+    text-decoration: line-through;
+    color: #999;
+}
+
+/* تنسيق مربع الاختيار (لجعله أكبر قليلاً وأكثر وضوحاً) */
+.task-completion-check {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-left: 10px; /* مسافة بسيطة عن التاريخ */
+    accent-color: #4a1f80; /* لون التظليل عند الاختيار */
+}
+/* ----------------------------------------------
+   8. GRADES SECTION STYLES
+---------------------------------------------- */
+
+/* لجعل قسم الدرجات يأخذ العرض الكامل في التخطيط الشبكي */
+.course-sections-grid > .tasks-section {
+    grid-column: 1 / -1; 
+    padding-top: 20px;
+    margin-top: 10px;
+    /* إعطاء خلفية بسيطة لتمييزها */
+    background: white;
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.course-sections-grid > .tasks-section h2 {
+    color: #4a1f80;
+    font-size: 22px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.course-sections-grid > .tasks-section h2 .emoji {
+    margin-right: 8px;
+}
+/* تنسيق شريط المهمة داخل قسم الدرجات */
+.task-strip.grade-strip {
+    /* تغيير الخلفية قليلاً لتمييزها داخل حاوية الدرجات */
+    background: #ffffff; 
+    border: 1px solid #eee;
+    padding: 15px 20px; /* زيادة التباعد قليلاً */
+}
+
+/* تنسيق البيانات الوصفية (التاريخ وحقل الدرجة) */
+.task-metadata-strip.grading-metadata {
+    gap: 25px; /* زيادة المسافة بين التاريخ وحقل الدرجة */
+}
+
+/* حاوية إدخال الدرجة */
+.grade-input-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* التأكد من أن حقل الدرجة لا يظهر في وضع الدرجات */
+    flex-shrink: 0; 
+}
+
+.grade-input-container label {
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+}
+
+/* تنسيق حقل الإدخال للدرجة */
+.grade-input {
+    width: 70px; /* حجم صغير مناسب */
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 15px;
+    -moz-appearance: textfield; /* لإخفاء أسهم الزيادة/النقصان في Firefox */
+}
+/* إخفاء أسهم الزيادة/النقصان في Chrome/Safari */
+.grade-input::-webkit-outer-spin-button,
+.grade-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* ----------------------------------------------
+   RESPONSIVE
+---------------------------------------------- */
+@media (max-width: 980px) {
+  h1.title {
+    font-size: 40px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .home-page .main {
+    margin-left: 0;
+  }
+}

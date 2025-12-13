@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudEase — Signup</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="auth-page">
+  <div class="bg-full" aria-hidden>
+    <img src="https://images.unsplash.com/photo-1657757996603-acec063f1d9b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600" alt="bg">
+    <div class="bg-overlay"></div>
+  </div>
+  <div class="auth-container">
+    <div class="auth-card">
+
+      <h2 class="auth-title">Create Account</h2>
+      <p class="auth-subtitle">Quick Signup</p>
+
+      <form id="signup-form" class="auth-form">
+        <input id="su-name" type="text" name="name" placeholder="Full name" required />
+        <input id="su-email" type="email" name="email" placeholder="Email" required />
+        <input id="su-pass" type="password" name="pass" placeholder="Password" required />
+
+        <div class="auth-actions">
+          <button class="btn-primary" type="submit">Create</button>
+          <a href="index.html" class="btn-link">Cancel</a>
+        </div>
+      </form>
+
+    </div>
+    <p id="su-message"></p>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

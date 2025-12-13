@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StudEase — Course Details</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="details-page">
+
+    <div class="homeBg-full" aria-hidden></div>
+
+    <div class="app-wrap">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="brand">StudEase</span>
+            </div>
+            <nav class="nav">
+                <a href="homePage.html">Home</a>
+                <a href="friends.html">Friends</a>
+                <a href="groups.html">Groups</a>
+                <a href="courses.html">Courses</a>
+                <a href="tasks.html">Tasks</a>
+                <a href="profile.html">Account</a>
+            </nav>
+            <div class="user-name"></div>
+        </aside>
+
+        <main class="course-details-container">
+
+            <div class="details-topbar">
+                <a href="courses.html" class="back-btn">← Back to Courses</a>
+                <h2 id="courseTitle">Loading Course...</h2>
+            </div>
+
+            <div class="course-sections-grid">
+
+                <section class="details-card projects-section">
+                    <h3>Projects & Assignments (<span id="projectsCount">0</span>)</h3>
+                    <div id="projectsList" class="section-list tasks-grid">
+                    </div>
+                    <button class="add-item-btn" id="openProjectModalBtn">+ Add New Project</button>
+                </section>
+
+                <section class="details-card exams-section">
+                    <h3>Exams (<span id="examsCount">0</span>)</h3>
+                    <div id="examsList" class="section-list">
+                    </div>
+                    <button class="add-item-btn" id="openExamModalBtn">+ Add New Exam</button>
+
+                </section>
+                <div class="tasks-section">
+                    <h2>🏆 Grades & Completed Tasks</h2>
+                    <div id="gradesList" class="tasks-grid">
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+    <div class="course-task-modal" id="courseTaskModal">
+        <div class="course-task-content">
+            <h2 id="courseTaskModalTitle">Add New Item</h2>
+            <form id="courseTaskForm">
+
+                <label for="courseTaskName">Item Name:</label>
+                <input type="text" id="courseTaskName" placeholder="Item name" required />
+
+                <label for="courseTaskDate">Due Date (Day):</label>
+                <input type="date" id="courseTaskDate" required />
+
+                <div class="course-task-actions">
+                    <button type="submit" id="saveCourseTaskBtn">Save</button>
+                    <button type="button" id="closeCourseTaskModalBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
