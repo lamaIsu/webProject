@@ -1690,3 +1690,480 @@ const itemHTML = (title, course, due, type) => `
   
 })();
 
+
+// **********************************************
+// * Pomodoro Page *
+// **********************************************
+
+function initQuickTimer() {
+  const timerTime = document.getElementById("timer-time");
+  if (!timerTime) return; 
+
+  console.log("Smart Pomodoro Timer initialized!");
+
+  const timerRing = document.getElementById("timer-ring");
+  const btnPlay = document.getElementById("timer-play");
+  const chipQuit = document.getElementById("timer-15"); // Quit button
+  const timerTitle = document.querySelector(".qt-title"); // title
+
+  const STUDY_TIME = 25 * 60;
+  const BREAK_TIME = 5 * 60;
+  
+  let timeLeft = STUDY_TIME; 
+  let totalTime = STUDY_TIME;
+  let timerInterval = null;
+  let isRunning = false;
+  let currentMode = 'study'; // 'study' or 'break'
+
+  // time format
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s < 10 ? "0" + s : s}`;
+  }
+
+  function updateRing() {
+    if (!timerRing) return;
+    const percent = timeLeft / totalTime; 
+    const deg = (1 - percent) * 360;
+    
+    const color = currentMode === 'study' ? '#8b5cf6' : '#4b4de0ff'; // colors of study/break ring
+    timerRing.style.background = `conic-gradient(${color} ${deg}deg, transparent 0deg)`;
+  }
+
+  // switch mode (Study <-> Break)
+  function switchMode() {
+    if (currentMode === 'study') {
+        // switch to break
+        currentMode = 'break';
+        timeLeft = BREAK_TIME;
+        totalTime = BREAK_TIME;
+        if (timerTitle) timerTitle.textContent = "Break";
+    } else {
+        // switch to study
+        currentMode = 'study';
+        timeLeft = STUDY_TIME;
+        totalTime = STUDY_TIME;
+        if (timerTitle) timerTitle.textContent = "Study";
+    }
+    timerTime.textContent = formatTime(timeLeft);
+    updateRing();
+  }
+
+  // timer 
+  function tick() {
+    if (timeLeft > 0) {
+      timeLeft--;
+      timerTime.textContent = formatTime(timeLeft);
+      updateRing();
+    } else {
+      // timeout
+      switchMode(); // automatically switch
+    }
+  }
+
+  // play/pause
+  function toggleTimer() {
+    if (isRunning) {
+      clearInterval(timerInterval);
+      isRunning = false;
+      if(btnPlay) btnPlay.textContent = "▶";
+    } else {
+      timerInterval = setInterval(tick, 1000);
+      isRunning = true;
+      if(btnPlay) btnPlay.textContent = "⏸";
+    }
+  }
+
+  // Event Listeners
+  if (btnPlay) {
+    btnPlay.addEventListener("click", toggleTimer);
+  }
+
+  // Quit button
+  if (chipQuit) {
+    chipQuit.addEventListener("click", () => {
+        const wasRunning = isRunning;
+        clearInterval(timerInterval);
+        isRunning = false;
+        if(btnPlay) btnPlay.textContent = "▶";
+
+        //quit
+        const userConfirmed = confirm("Are you sure you want to quit?");
+
+        if (userConfirmed) {
+            window.location.href = "homePage.html";
+        }
+    });
+  }
+  
+  timerTime.textContent = formatTime(timeLeft);
+  updateRing();
+}
+document.addEventListener('DOMContentLoaded', () => {
+    initQuickTimer();
+    initFriendsPage(); 
+});
+
+
+// --------------------------------------------------------
+// ---------------- FRIENDS PAGE ----------------
+// --------------------------------------------------------
+
+let allFriends = []; 
+// 2 examples of request
+let pendingRequests = [
+    { id: 9901, name: ' User 1', username: 'temp_user_1', avatar: 'T1', isMock: true },
+    { id: 9902, name: ' User 2', username: 'temp_user_2', avatar: 'T2', isMock: true },
+];
+
+// inviting friend to pomodoro session
+async function inviteFriendToSession(friendId, friendName, buttonElement) {
+    
+    const originalText = buttonElement.textContent;
+    buttonElement.textContent = 'Sending...';
+    buttonElement.disabled = true;
+    buttonElement.style.backgroundColor = '#f9c74f'; // temporary
+
+    try {
+        const response = await fetch('/api/session/invite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                friendId: friendId, 
+                sessionId: 'CURRENT_USER_SESSION_ID'
+            }),
+        });
+        if (!response.ok) throw new Error('API failed to send invite');
+      
+        buttonElement.textContent = 'Invited!';
+        buttonElement.style.backgroundColor = '#10b981'; // success 
+        
+    } catch (error) {
+        console.error("Invite error:", error);
+        
+        // 3. تحديث الزر للفشل
+        buttonElement.textContent = 'Failed';
+        buttonElement.style.backgroundColor = '#ef4444'; // أحمر للفشل
+        buttonElement.disabled = false;
+        
+        // بعد 3 ثوانٍ، نرجع الزر إلى حالته الأصلية
+        setTimeout(() => {
+            buttonElement.textContent = originalText;
+            buttonElement.style.backgroundColor = ''; 
+            buttonElement.disabled = false;
+        }, 3000);
+    }
+}
+// --------------------------------------------------------
+// 2. MAIN FRIENDS PAGE LOGIC (initFriendsPage)
+// --------------------------------------------------------
+
+function initFriendsPage() {
+     const friendsPage = document.querySelector('.friends-page')
+    if (!friendsPage) return; 
+
+    const friendsListSection = document.getElementById('friendsListSection');
+    const friendsList = document.getElementById('friendsList');
+    const friendSearchInput = document.getElementById('friendSearchInput');
+    const noResultsMessage = document.getElementById('noResultsMessage');
+    const notifDot = document.getElementById('notifDot');
+    
+    const addFriendBtn = document.getElementById('addFriendBtn');
+    const requestsBtn = document.getElementById('requestsBtn');
+    const addFriendModal = document.getElementById('addFriendModal');
+    const requestsModal = document.getElementById('requestsModal');
+    
+    const requestsList = requestsModal ? requestsModal.querySelector('.requests-list') : null;
+    const userSearchInput = document.getElementById('userSearchInput');
+    const searchResultsList = document.querySelector('.search-results-list');
+    
+    // friends list
+    async function fetchFriendsData() {
+        try {
+            const response = await fetch('/api/friends'); 
+            if (!response.ok) throw new Error('Failed to fetch friends data');
+            const data = await response.json();
+            
+            allFriends = data.friends || [];
+            renderFriends(allFriends);
+
+        } catch (error) {
+            console.error("Error loading friends:", error);
+            noResultsMessage.innerHTML = 'Failed to load friends list. Please check your connection.';
+            renderFriends([]); 
+        }
+    }
+
+    function renderFriends(friendsToShow, searchTerm = null) {
+        if (!friendsList || !noResultsMessage || !friendsListSection) return;
+
+        friendsList.innerHTML = ''; 
+        noResultsMessage.style.display = 'none'; 
+         friendsListSection.style.display = 'block'; 
+
+        const hasFriendsInDB = allFriends.length > 0;
+        const isSearching = searchTerm !== null && searchTerm !== ''; 
+        
+        if (!hasFriendsInDB && !isSearching) {
+            
+            friendsList.style.display = 'none'; 
+            
+            noResultsMessage.style.display = 'block';
+            noResultsMessage.innerHTML = `
+                You don't have any friends yet :( <br>
+                <span>Invite one!</span>
+            `;
+            return;
+        } 
+
+        if (isSearching) {
+            friendsList.style.display = 'none';
+            // reuslt not found
+            noResultsMessage.style.display = 'block';
+            noResultsMessage.textContent = `No results found for "${searchTerm}"`;
+            return;
+        }
+        
+        // search result
+        friendsList.style.display = 'block'; 
+        noResultsMessage.style.display = 'none';
+
+        friendsToShow.forEach(friend => {
+          const name = friend.name || 'Unknown User';
+          const avatarInitials = name.split(' ').map(n => n[0]).join('');
+          const li = document.createElement('li');
+          li.innerHTML = `
+              <div class="friend-info">
+                  <span class="friend-avatar">${avatarInitials}</span>
+                  <span class="friend-name">${name}</span>
+              </div>
+              <button class="invite-btn" data-friend-id="${friend.id}">Invite to Session</button>
+          `;
+          friendsList.appendChild(li);
+      });
+    }
+
+    // requests
+    async function fetchPendingRequests() {
+        let mockRequests = pendingRequests.filter(r => r.isMock);
+        pendingRequests = [...mockRequests];
+
+        try {
+            const response = await fetch('/api/requests'); 
+            if (!response.ok) throw new Error('Failed to fetch requests');
+            const data = await response.json();
+            const realRequests = data.requests.map(req => ({...req, isMock: false}));
+            pendingRequests = [...pendingRequests, ...realRequests];
+            
+        } catch (error) {
+            console.error("Error loading requests:", error);
+        }
+        renderRequests();
+    }
+    
+    // show requests
+    function renderRequests() {
+        if (!requestsList) return;
+        requestsList.innerHTML = '';
+
+        if (pendingRequests.length === 0) {
+            requestsList.innerHTML = '<p class="modal-hint" style="text-align: center;">No pending friend requests.</p>';
+        } else {
+            pendingRequests.forEach(request => {
+                const name = request.name || 'Unknown Request';
+                const avatarInitials = name.split(' ').map(n => n[0]).join('');
+                const li = document.createElement('li');
+                li.classList.add('request-item');
+                li.innerHTML = `
+                    <div class="friend-info">
+                        <span class="friend-avatar">${avatarInitials}</span>
+                        <span class="friend-name">${name}</span>
+                    </div>
+                    <div class="request-actions">
+                        <button class="btn-accept" data-id="${request.id}">Accept</button>
+                        <button class="btn-reject" data-id="${request.id}">Reject</button>
+                    </div>
+                `;
+                requestsList.appendChild(li);
+            });
+        }
+        
+        if (notifDot) {
+            notifDot.style.display = pendingRequests.length ? 'block' : 'none';
+        }
+    }
+
+
+    // handeling requests
+    async function handleRequestAction(request, action) {
+        
+        if (!request) return;
+        if (!request.isMock) {
+            const endpoint = action === 'accept' ? '/api/requests/accept' : `/api/requests/reject`;
+            const method = action === 'accept' ? 'POST' : 'DELETE';
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId: request.id }),
+                });
+
+                if (!response.ok) throw new Error(`Failed to ${action} request`);
+
+            } catch (error) {
+                console.error("API error during request action:", error);
+                alert(`Failed to complete action: ${error.message}`);
+                return;
+            }
+        }
+        
+        const index = pendingRequests.findIndex(req => req.id === request.id);
+        if (index !== -1) pendingRequests.splice(index, 1);
+        
+        if (action === 'accept') {
+            allFriends.push(request);
+        }
+        renderRequests();
+        renderFriends(allFriends); 
+    }
+
+
+    // search for users
+    async function searchNewUsers() {
+        if (!userSearchInput || !searchResultsList) return;
+        const term = userSearchInput.value.toLowerCase().trim();
+        searchResultsList.innerHTML = '';
+        
+        if (term.length < 0) {
+            searchResultsList.innerHTML = '<p class="modal-hint" style="text-align: center;">Enter username..</p>';
+            return;
+        }
+        searchResultsList.innerHTML = '<p class="modal-hint" style="text-align: center;">Searching...</p>';
+
+        try {
+            // search by username
+            const response = await fetch(`/api/users/search?username=${encodeURIComponent(term)}`);
+            if (!response.ok) throw new Error('Search failed');
+            
+            const data = await response.json();
+            const results = data.users || [];
+
+            if (results.length === 0) {
+                searchResultsList.innerHTML = `<p class="modal-hint" style="text-align: center;">No users found matching "${term}".</p>`;
+                return;
+            }
+
+            searchResultsList.innerHTML = '';
+            results.forEach(user => {
+                const name = user.name || user.username;
+                const avatarInitials = name.split(' ').map(n => n[0]).join('');
+                const li = document.createElement('li');
+                li.classList.add('result-item');
+                
+                let buttonHtml = '';
+                
+                if (user.status === 'not-friend' || !user.status) {
+                    buttonHtml = `<button class="btn-primary btn-small send-request-btn" data-id="${user.id}">Send Request</button>`;
+                } else if (user.status === 'pending') {
+                    buttonHtml = `<button class="btn-primary btn-small sent" disabled>Request Sent</button>`;
+                } else if (user.status === 'friend') {
+                    buttonHtml = `<span class="modal-hint">Friends</span>`;
+                }
+
+                li.innerHTML = `
+                    <div class="friend-info">
+                        <span class="friend-avatar">${avatarInitials}</span>
+                        <span class="friend-name">${name}</span>
+                        <span class="modal-hint">(@${user.username})</span>
+                    </div>
+                    ${buttonHtml}
+                `;
+                searchResultsList.appendChild(li);
+            });
+        } catch (error) {
+            console.error("Search API error:", error);
+            searchResultsList.innerHTML = `<p class="modal-hint" style="text-align: center; color: red;">Search error. Try again later.</p>`;
+        }
+    }
+
+    //Event Listeners
+
+    if (friendSearchInput) {
+        friendSearchInput.addEventListener('keyup', () => renderFriends(allFriends, friendSearchInput.value.toLowerCase().trim()));
+    }
+    if (addFriendBtn && addFriendModal) {
+        addFriendBtn.addEventListener('click', () => {
+             addFriendModal.style.display = 'flex'; 
+        });
+    }
+    if (requestsBtn && requestsModal) {
+        requestsBtn.addEventListener('click', () => {
+            requestsModal.style.display = 'flex'; 
+            fetchPendingRequests();
+        });
+    }
+    
+    // accept/reject buttons
+    if (requestsList) {
+        requestsList.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-accept, .btn-reject');
+            if (!btn) return;
+
+            const id = parseInt(btn.dataset.id);
+            const action = btn.classList.contains('btn-accept') ? 'accept' : 'reject';
+            
+            const request = pendingRequests.find(req => req.id === id);
+            if (request) handleRequestAction(request, action);
+        });
+    }
+
+    // search to add friend
+    if (userSearchInput) {
+        let searchTimeout;
+        userSearchInput.addEventListener('keyup', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(searchNewUsers, 300);
+        });
+    }
+    
+    // Send Request
+    if (searchResultsList) {
+        searchResultsList.addEventListener('click', async (e) => {
+            const sendBtn = e.target.closest('.send-request-btn');
+            if (!sendBtn) return;
+            const userId = sendBtn.dataset.id;
+            sendBtn.textContent = 'Sending...';
+            sendBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/requests/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ recipientId: userId }),
+                });
+                if (!response.ok) throw new Error('Failed to send request');
+                sendBtn.textContent = 'Request Sent';
+                sendBtn.classList.add('sent');
+            } catch (error) {
+                console.error("Send request error:", error);
+                sendBtn.textContent = 'Failed';
+                sendBtn.disabled = false;
+            }
+        });
+    }
+    // Invite friend to Session
+    if (friendsList) {
+        friendsList.addEventListener('click', (e) => {
+            const inviteBtn = e.target.closest('.invite-btn');
+            if (!inviteBtn) return;
+            const friendId = inviteBtn.dataset.friendId;
+            const friendName = inviteBtn.parentElement.querySelector('.friend-name').textContent; 
+            if (friendId) {
+                inviteFriendToSession(friendId, friendName, inviteBtn);
+            }
+        });
+    }
+    fetchFriendsData(); 
+}
