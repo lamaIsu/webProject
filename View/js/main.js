@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                           document.body.classList.contains('courses-page') ||
                           document.body.classList.contains('course-details-page') ||
                           document.body.classList.contains('friends-page') ||
-                          document.body.classList.contains('groups-page') ||
+                          document.body.classList.contains('Pomodoro-page') ||
                           document.body.classList.contains('profile-page');
 
   if (!isProtectedPage) return; // لا تفعل شيء في الصفحات غير المحمية
