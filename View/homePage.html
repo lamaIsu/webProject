@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StudEase — Home</title>
   <link rel="stylesheet" href="styles.css" />
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="home-page">
 
-  <!-- Background -->
-  <div class="homeBg-full" aria-hidden>
-    <!--<div class="bg-overlay"></div>-->
-  </div>
+<body class="home-page">
 
   <!-- App Layout -->
   <div class="app-wrap">
@@ -19,40 +17,165 @@
     <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo">
-        
         <span class="brand">StudEase</span>
       </div>
 
       <nav class="nav">
-        <a href="#" class="active">Home</a>
+        <a href="homePage.html" class="active">Home</a>
         <a href="friends.html">Friends</a>
         <a href="groups.html">Groups</a>
         <a href="courses.html">Courses</a>
         <a href="tasks.html">Tasks</a>
         <a href="profile.html">Account</a>
       </nav>
-      <div class="user-name">
-       
-      </div>
-      
+
+      <div class="user-name" id="sidebarUserName"></div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="main">
-      <div class="topnav">
-        <h1 class="title">Welcome, John!</h1>
-      </div>
-      
-      <div class="content">
-        
-        <h2>Dashboard</h2>
-        <p>This is your main dashboard. You can see your friends, groups, courses, tasks, and manage your account from the sidebar.</p>
-        <!-- هنا ممكن تضيف محتوى إضافي لاحقاً -->
+      <div class="home-wrap">
+
+        <!-- Top -->
+        <div class="home-top">
+          <div>
+            <h1 class="home-title">
+              Welcome back, <span id="homeUserName">User</span>!
+            </h1>
+            <p class="home-sub">
+              Here's what's happening with your studies today.
+            </p>
+          </div>
+
+          <div class="home-search">
+            <input type="text" placeholder="Search courses, tasks..." />
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <section class="home-cards">
+          <div class="home-card">
+            <p>Active Courses</p>
+            <h2 id="statCourses">0</h2>
+          </div>
+
+          <div class="home-card">
+            <p>Upcoming Exams</p>
+            <h2 id="statExams">0</h2>
+          </div>
+
+          <div class="home-card">
+            <p>Pending Tasks</p>
+            <h2 id="statPending">0</h2>
+          </div>
+
+          <div class="home-card">
+            <p>Progress</p>
+            <h2 id="statProgress">0%</h2>
+          </div>
+        </section>
+
+        <!-- Panels -->
+        <section class="home-panels">
+
+          <!-- Upcoming Exams Panel -->
+          <div class="home-panel">
+            <div class="home-panel-head">
+              <h3>Upcoming Exams</h3>
+              <a class="home-icon-link" href="courses.html" aria-label="View all exams">
+                <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+            <div id="homeExamsList">
+              <div class="home-empty">No upcoming exams</div>
+            </div>
+          </div>
+
+          <!-- Project Deadlines Panel -->
+          <div class="home-panel">
+            <div class="home-panel-head">
+              <h3>Project Deadlines</h3>
+              <a class="home-icon-link" href="courses.html" aria-label="View all projects">
+                <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+            <div id="homeProjectsList">
+              <div class="home-empty">No project deadlines</div>
+            </div>
+          </div>
+
+          <!-- Today's Tasks Panel -->
+          <div class="home-panel">
+            <div class="home-panel-head">
+              <h3>Today's Tasks</h3>
+              <a class="home-icon-link" href="tasks.html" aria-label="View all tasks">
+                <i data-lucide="arrow-right"></i>
+              </a>
+            </div>
+            <div id="homeTodayTasks">
+              <div class="home-empty">No tasks for today</div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Study Progress and Timer -->
+        <section class="home-bottom-row">
+
+          <!-- Study Progress Chart -->
+          <div class="progress-card">
+            <h3>Study Progress (Last 7 Days)</h3>
+            <div class="chart-wrapper">
+              <canvas id="progressChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Quick Timer -->
+          <div class="timer-card">
+            <h2 class="qt-title">Quick Timer</h2>
+
+            <div class="qt-body">
+              <!-- ring -->
+              <div class="qt-outer">
+                <div class="qt-inner">
+                  <div id="timer-ring" class="qt-ring"></div>
+
+                  <div class="qt-center">
+                    <div id="timer-time" class="qt-time">25:00</div>
+                    <div id="timer-status" class="qt-status">Ready</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- controls -->
+              <div class="qt-controls">
+                <button id="timer-play" class="qt-play" type="button" aria-label="Play/Pause">▶</button>
+                <button id="timer-reset" class="qt-reset" type="button" aria-label="Reset">⟲</button>
+              </div>
+
+              <!-- durations -->
+              <div class="qt-durations">
+                <button id="timer-25" class="qt-chip is-active" type="button">25 min</button>
+                <button id="timer-15" class="qt-chip" type="button">15 min</button>
+                <button id="timer-5" class="qt-chip" type="button">5 min</button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
       </div>
     </main>
 
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/main.js"></script>
+  <script>
+    // Initialize Lucide icons
+    if (window.lucide) {
+      lucide.createIcons();
+    }
+  </script>
 </body>
 </html>
