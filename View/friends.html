@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>StudEase — Friends</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body class="friends-page">
+
+    <div class="app-wrap">
+
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="brand">StudEase</span>
+            </div>
+
+            <nav class="nav">
+                <a href="homePage.html">Home</a>
+                <a href="friends.html" class="active">Friends</a>
+                <a href="Pomodoro.html">Pomodoro</a>
+                <a href="courses.html">Courses</a>
+                <a href="tasks.html">Tasks</a>
+                <a href="profile.html">Account</a>
+            </nav>
+
+            <div class="user-name" id="sidebarUserName"></div>
+        </aside>
+
+        <main class="main">
+            <div class="home-wrap">
+
+                <div class="home-top">
+                    <h1 class="home-title">Friends</h1>
+                </div>
+
+                <section class="friends-actions-section">
+                    
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="friendSearchInput" placeholder="Search friends.."/>
+                    </div>
+
+
+                    <div class="friends-buttons">
+                        <button id="addFriendBtn" class="btn-add-friend">Add Friend +</button>
+                        <button id="requestsBtn" class="btn-requests">
+                            Friend requests
+                            <span id="notifDot" class="notification-dot"></span>
+                        </button>
+                    </div>
+
+                </section>
+
+                <section class="friends-list-container" id="friendsListSection">
+                    
+                    <h4 class="section-title">My Friends</h4>
+                    
+                    <ul id="friendsList" class="list-group">
+                        </ul>
+
+                    <div id="noResultsMessage" class="no-results-message" style="display:none;">
+                        </div>
+                    
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+
+    <div id="addFriendModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('addFriendModal').style.display='none'">&times;</span>
+            <h2>Add New Friend</h2>
+            
+            <div class="search-container modal-search">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="userSearchInput" placeholder="Search by name or email to add..." />
+            </div>
+
+            <ul class="list-group search-results-list">
+                <li class="result-item">
+                    <span class="friend-avatar">SM</span>
+                    <span class="friend-name">Sara Mohamed</span>
+                    <button class="btn-primary btn-small">Send Request</button>
+                </li>
+                <li class="result-item">
+                    <span class="friend-avatar">AA</span>
+                    <span class="friend-name">Ali Ahmed</span>
+                    <button class="btn-primary btn-small sent" disabled>Request Sent</button>
+                </li>
+            </ul>
+            
+            <p class="modal-hint">Results will appear here after searching.</p>
+
+        </div>
+    </div>
+
+    <div id="requestsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('requestsModal').style.display='none'">&times;</span>
+            <h2>Friend Requests</h2>
+            
+            <ul class="list-group requests-list">
+                <li class="request-item">
+                    <span class="friend-avatar">KA</span>
+                    <span class="friend-name">Khalid Alali</span>
+                    <div class="request-actions">
+                        <button class="btn-accept">Accept</button>
+                        <button class="btn-reject">Reject</button>
+                    </div>
+                </li>
+                
+                <li class="request-item">
+                    <span class="friend-avatar">FN</span>
+                    <span class="friend-name">Fatima Nader</span>
+                    <div class="request-actions">
+                        <button class="btn-accept">Accept</button>
+                        <button class="btn-reject">Reject</button>
+                    </div>
+                </li>
+            </ul>
+
+            <p class="modal-hint">You have 2 pending requests.</p>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script> 
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudEase — Groups</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+</head>
+
+<body class="Pomodoro-page">
+
+  <!-- App Layout -->
+  <div class="app-wrap">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="brand">StudEase</span>
+      </div>
+
+      <nav class="nav">
+        <a href="homePage.html">Home</a>
+        <a href="friends.html">Friends</a>
+        <a href="Pomodoro.html" class="active">Pomodoro</a>
+        <a href="courses.html">Courses</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="profile.html">Account</a>
+      </nav>
+
+      <div class="user-name" id="sidebarUserName"></div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="home-wrap">
+
+        <!-- Top -->
+        <div class="home-top">
+          <div>
+            <h1 class="home-title">Pomodoro</h1>
+          </div>
+
+
+          <div class="friends-buttons">
+                <button id="inviteFriend" class="btn-invite">
+                    Invite Friend to Session!
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Timer -->
+        <section>
+
+            <div class="timer-card">
+            <h2 class="qt-title">Study</h2>
+
+            <div class="qt-body">
+              <!-- ring -->
+              <div class="qt-outer">
+                <div class="qt-inner">
+                  <div id="timer-ring" class="qt-ring"></div>
+
+                  <div class="qt-center">
+                    <div id="timer-time" class="qt-time">25:00</div>
+                    <div class="qt-controls">
+                        <button id="timer-play" class="qt-play" type="button" aria-label="Play/Pause">▶</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- durations -->
+              <div class="qt-durations">
+                <button id="timer-15" class="qt-chip" type="button">quit</button>
+              </div>
+
+            </div>
+          </div>
+        </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/main.js"></script>
+    <script>
+
+  </script>
+</body>
+</html>
