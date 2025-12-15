@@ -13,7 +13,7 @@ const PORT = 3000;
 app.use(express.static("View"));
 app.use(bodyParser.json());
 
-// ✅ Mongo connect (عدلي اسم الداتابيس لو تبين)
+// ✅ Mongo connect
 mongoose
   .connect("mongodb://127.0.0.1:27017/studease")
   .then(() => console.log("MongoDB connected"))
@@ -39,6 +39,28 @@ app.get("/api/calendar-notes", calendarController.handleGetNotes);
 app.post("/api/calendar-notes", calendarController.handleCreateNote);
 app.delete("/api/calendar-notes/:id", calendarController.handleDeleteNote);
 app.delete("/api/calendar-notes", calendarController.handleClearAllNotes);
+
+app.get("/api/friends", (req, res) => {
+    res.json({ success: true, friends: [] }); 
+});
+
+app.get("/api/requests", (req, res) => {
+    res.json({ success: true, requests: [] }); 
+});
+
+app.get("/api/users/search", (req, res) => {
+    const searchTerm = req.query.username; 
+    res.json({ 
+        users: [] 
+    });
+});
+
+app.post("/api/session/invite", (req, res) => {
+    const { friendId, sessionId } = req.body;
+    res.json({ success: true, message: "Invitation sent successfully." });
+});
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
