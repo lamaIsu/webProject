@@ -1527,3 +1527,260 @@ const itemHTML = (title, course, due, type) => `
   });
 
 })();
+
+
+(function initProfilePage() {
+  if (!document.body.classList.contains("profile-page")) return;
+
+  const userId = localStorage.getItem("userId");
+  const username = localStorage.getItem("username") || "User";
+
+  // ===== Elements =====
+  const sidebarName = document.getElementById("sidebarUserName");
+  const avatarImg = document.getElementById("avatarImg");
+  const avatarLetter = document.getElementById("avatarLetter");
+  const nameText = document.getElementById("profileNameText");
+  const emailText = document.getElementById("profileEmailText");
+  const idText = document.getElementById("profileUserId");
+
+  // ===== Initialize =====
+  if (sidebarName) sidebarName.textContent = username;
+  if (avatarLetter) avatarLetter.textContent = (username.trim()[0] || "U").toUpperCase();
+  if (nameText) nameText.textContent = username;
+  if (idText) idText.textContent = userId || "—";
+
+  // Load saved avatar
+  const savedAvatar = localStorage.getItem("userAvatar");
+  if (savedAvatar && avatarImg && avatarLetter) {
+    avatarImg.src = savedAvatar;
+    avatarImg.style.display = "block";
+    avatarLetter.style.display = "none";
+  }
+
+  // ===== Load user info =====
+  if (userId) {
+    (async () => {
+      try {
+        const res = await fetch(`/api/users/${userId}`, { cache: "no-store" });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const u = data.user || data.data || data;
+
+        const name = u.name || username;
+        const email = u.email || "";
+        const userAvatar = u.avatar || savedAvatar;
+
+        if (nameText) nameText.textContent = name;
+        if (emailText) emailText.textContent = email || "—";
+
+        // Update avatar
+        if (userAvatar && avatarImg && avatarLetter) {
+          avatarImg.src = userAvatar;
+          avatarImg.style.display = "block";
+          avatarLetter.style.display = "none";
+          localStorage.setItem("userAvatar", userAvatar);
+        } else if (avatarLetter) {
+          avatarLetter.textContent = (String(name).trim()[0] || "U").toUpperCase();
+        }
+      } catch (e) {
+        console.warn("User profile GET failed:", e);
+      }
+    })();
+  }
+
+  // ===== Change Avatar Modal =====
+  const avatarModal = document.getElementById("avatarModal");
+  const btnChangeAvatar = document.getElementById("btnChangeAvatar");
+  const btnCloseAvatar = document.getElementById("btnCloseAvatar");
+  const btnCloseAvatar2 = document.getElementById("btnCloseAvatar2");
+  const btnGenerateAvatar = document.getElementById("btnGenerateAvatar");
+  const btnUploadAvatar = document.getElementById("btnUploadAvatar");
+  const avatarFileInput = document.getElementById("avatarFileInput");
+  const avatarMsg = document.getElementById("avatarMsg");
+
+  const avatarPreviewImg = document.getElementById("avatarPreviewImg");
+  const avatarPreviewLetter = document.getElementById("avatarPreviewLetter");
+
+  // Open modal
+  if (btnChangeAvatar && avatarModal) {
+    btnChangeAvatar.addEventListener("click", () => {
+      if (avatarMsg) avatarMsg.textContent = "";
+      avatarModal.style.display = "flex";
+
+      // Update preview
+      const currentSaved = localStorage.getItem("userAvatar");
+      if (currentSaved && avatarPreviewImg && avatarPreviewLetter) {
+        avatarPreviewImg.src = currentSaved;
+        avatarPreviewImg.style.display = "block";
+        avatarPreviewLetter.style.display = "none";
+      } else if (avatarPreviewLetter) {
+        avatarPreviewLetter.textContent = (username[0] || "U").toUpperCase();
+      }
+    });
+  }
+
+  // Close modal
+  if (btnCloseAvatar && avatarModal) {
+    btnCloseAvatar.addEventListener("click", () => closeModal(avatarModal));
+  }
+  if (btnCloseAvatar2 && avatarModal) {
+    btnCloseAvatar2.addEventListener("click", () => closeModal(avatarModal));
+  }
+
+  // Generate avatar
+  if (btnGenerateAvatar) {
+    btnGenerateAvatar.addEventListener("click", () => {
+      const currentName = localStorage.getItem("username") || "User";
+      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        currentName
+      )}&size=256&background=4a1f80&color=fff&bold=true&font-size=0.4`;
+
+      updateAvatar(avatarUrl);
+      if (userId) saveAvatarToBackend(avatarUrl);
+
+      if (avatarMsg) {
+        avatarMsg.textContent = "✓ Avatar generated successfully!";
+        avatarMsg.style.background = "#f0fdf4";
+        avatarMsg.style.borderColor = "#bbf7d0";
+        avatarMsg.style.color = "#166534";
+      }
+
+      setTimeout(() => closeModal(avatarModal), 1200);
+    });
+  }
+
+  // Upload avatar
+  if (btnUploadAvatar && avatarFileInput) {
+    btnUploadAvatar.addEventListener("click", () => {
+      avatarFileInput.click();
+    });
+
+    avatarFileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        if (avatarMsg) {
+          avatarMsg.textContent = "⚠ Please select an image file.";
+          avatarMsg.style.background = "#fef2f2";
+          avatarMsg.style.borderColor = "#fecaca";
+          avatarMsg.style.color = "#991b1b";
+        }
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        if (avatarMsg) {
+          avatarMsg.textContent = "⚠ Image must be less than 2MB.";
+          avatarMsg.style.background = "#fef2f2";
+          avatarMsg.style.borderColor = "#fecaca";
+          avatarMsg.style.color = "#991b1b";
+        }
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64 = event.target.result;
+
+        updateAvatar(base64);
+        if (userId) saveAvatarToBackend(base64);
+
+        if (avatarMsg) {
+          avatarMsg.textContent = "✓ Avatar uploaded successfully!";
+          avatarMsg.style.background = "#f0fdf4";
+          avatarMsg.style.borderColor = "#bbf7d0";
+          avatarMsg.style.color = "#166534";
+        }
+
+        setTimeout(() => closeModal(avatarModal), 1200);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function updateAvatar(url) {
+    if (avatarImg && avatarLetter) {
+      avatarImg.src = url;
+      avatarImg.style.display = "block";
+      avatarLetter.style.display = "none";
+    }
+
+    if (avatarPreviewImg && avatarPreviewLetter) {
+      avatarPreviewImg.src = url;
+      avatarPreviewImg.style.display = "block";
+      avatarPreviewLetter.style.display = "none";
+    }
+
+    localStorage.setItem("userAvatar", url);
+  }
+
+  async function saveAvatarToBackend(avatarUrl) {
+    try {
+      await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatar: avatarUrl }),
+      });
+    } catch (e) {
+      console.warn("Could not save avatar to backend:", e);
+    }
+  }
+
+  // Close modals on outside click (only avatar modal)
+  [avatarModal].forEach((modal) => {
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal(modal);
+      });
+    }
+  });
+
+  function closeModal(modal) {
+    if (modal) modal.style.display = "none";
+  }
+
+  // ===== Logout =====
+  const btnLogout = document.getElementById("btnLogout");
+  if (btnLogout) {
+    btnLogout.addEventListener("click", () => {
+      if (confirm("Are you sure you want to log out?")) {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("username");
+        localStorage.removeItem("userAvatar");
+        window.location.href = "login.html";
+      }
+    });
+  }
+
+  // ===== Delete Account =====
+  const btnDelete = document.getElementById("btnDeleteAccount");
+  if (btnDelete) {
+    btnDelete.addEventListener("click", async () => {
+      const confirmation = prompt('Type "DELETE" to confirm account deletion:');
+      if (confirmation !== "DELETE") {
+        alert("Account deletion cancelled.");
+        return;
+      }
+
+      const finalConfirm = confirm("This action cannot be undone. Are you absolutely sure?");
+      if (!finalConfirm) return;
+
+      try {
+        const res = await fetch(`/api/users/${userId}`, { method: "DELETE" });
+        const data = await res.json();
+
+        if (res.ok) {
+          localStorage.clear();
+          alert("Account deleted successfully.");
+          window.location.href = "signup.html";
+        } else {
+          alert(data.message || "Could not delete account.");
+        }
+      } catch (e) {
+        alert("Server connection error.");
+      }
+    });
+  }
+})();

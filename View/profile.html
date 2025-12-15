@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StudEase — Account</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="profile-page">
+  <div class="app-wrap">
+
+    <aside class="sidebar">
+      <div class="logo">
+        <span class="brand">StudEase</span>
+      </div>
+
+      <nav class="nav">
+        <a href="homePage.html">Home</a>
+        <a href="friends.html">Friends</a>
+        <a href="groups.html">Groups</a>
+        <a href="courses.html">Courses</a>
+        <a href="tasks.html">Tasks</a>
+        <a href="profile.html" class="active">Profile</a>
+      </nav>
+
+      <div class="user-name" id="sidebarUserName"></div>
+    </aside>
+
+    <main class="main">
+      <div class="profile-wrap">
+
+        <div class="profile-hero">
+          <div class="profile-hero-content">
+            <h1 class="profile-hero-title">Profile</h1>
+          </div>
+          <div class="profile-hero-decoration"></div>
+        </div>
+
+        <section class="profile-grid">
+
+          <div class="profile-card profile-identity-card">
+
+            <div class="identity-avatar-section">
+              <div class="avatar-container">
+                <div class="avatar-ring"></div>
+                <div class="avatar" id="avatarCircle">
+                  <img src="" alt="" id="avatarImg" style="display:none;" />
+                  <span id="avatarLetter">U</span>
+                </div>
+                <button class="avatar-edit-btn" id="btnChangeAvatar" type="button">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="identity-info">
+                <div class="identity-name" id="profileNameText">User</div>
+                <div class="identity-email" id="profileEmailText">—</div>
+                <div class="identity-badge">Student</div>
+              </div>
+            </div>
+
+            <div class="identity-meta">
+              <div class="meta-item">
+                <span class="meta-icon">🆔</span>
+                <div class="meta-content">
+                  <div class="meta-label">User ID</div>
+                  <div class="meta-value" id="profileUserId">—</div>
+                </div>
+              </div>
+
+              <div class="meta-item">
+                <span class="meta-icon">📅</span>
+                <div class="meta-content">
+                  <div class="meta-label">Member Since</div>
+                  <div class="meta-value">December 2025</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="identity-actions">
+              <button class="action-btn secondary" id="btnLogout">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+              </button>
+            </div>
+
+          </div>
+
+          <div class="profile-card profile-form-card">
+            <div class="form-section danger-section">
+              <div class="section-header">
+                <h3 class="section-title danger">Danger Zone</h3>
+                <span class="section-badge danger">Irreversible</span>
+              </div>
+
+              <div class="danger-warning">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <p>This will permanently delete your account and all associated data. This action cannot be undone.</p>
+              </div>
+
+              <button class="danger-btn" id="btnDeleteAccount">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Delete My Account</span>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Avatar Modal -->
+        <div class="modal-overlay" id="avatarModal">
+          <div class="modal-box">
+            <div class="modal-header">
+              <h2 class="modal-title">Change Profile Picture</h2>
+              <button class="modal-close" id="btnCloseAvatar" type="button">&times;</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="avatar-preview">
+                <div class="avatar-preview-circle" id="avatarPreview">
+                  <img src="" alt="" id="avatarPreviewImg" style="display:none;" />
+                  <span id="avatarPreviewLetter">U</span>
+                </div>
+              </div>
+
+              <div class="avatar-options">
+                <button class="avatar-option" id="btnGenerateAvatar" type="button">
+                  <div class="option-icon">🎨</div>
+                  <div class="option-content">
+                    <strong>Generate from Name</strong>
+                    <small>Create avatar with your initials</small>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+
+                <button class="avatar-option" id="btnUploadAvatar" type="button">
+                  <div class="option-icon">📷</div>
+                  <div class="option-content">
+                    <strong>Upload Image</strong>
+                    <small>Choose a photo from your device (max 2MB)</small>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+
+                <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" />
+              </div>
+
+              <div class="modal-message" id="avatarMsg"></div>
+            </div>
+
+            <div class="modal-footer">
+              <button class="modal-btn secondary" id="btnCloseAvatar2" type="button">Close</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
