@@ -4,14 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>StudEase — Home</title>
+
   <link rel="stylesheet" href="styles.css" />
-  
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body class="home-page">
 
-  <!-- App Layout -->
   <div class="app-wrap">
 
     <!-- Sidebar -->
@@ -26,7 +25,7 @@
         <a href="groups.html">Groups</a>
         <a href="courses.html">Courses</a>
         <a href="tasks.html">Tasks</a>
-        <a href="profile.html">Account</a>
+        <a href="profile.html">Profile</a>
       </nav>
 
       <div class="user-name" id="sidebarUserName"></div>
@@ -52,23 +51,20 @@
           </div>
         </div>
 
-        <!-- Stats Cards -->
+        <!-- Stats -->
         <section class="home-cards">
           <div class="home-card">
             <p>Active Courses</p>
             <h2 id="statCourses">0</h2>
           </div>
-
           <div class="home-card">
             <p>Upcoming Exams</p>
             <h2 id="statExams">0</h2>
           </div>
-
           <div class="home-card">
             <p>Pending Tasks</p>
             <h2 id="statPending">0</h2>
           </div>
-
           <div class="home-card">
             <p>Progress</p>
             <h2 id="statProgress">0%</h2>
@@ -78,51 +74,41 @@
         <!-- Panels -->
         <section class="home-panels">
 
-          <!-- Upcoming Exams Panel -->
           <div class="home-panel">
             <div class="home-panel-head">
               <h3>Upcoming Exams</h3>
-              <a class="home-icon-link" href="courses.html" aria-label="View all exams">
+              <a class="home-icon-link" href="courses.html">
                 <i data-lucide="arrow-right"></i>
               </a>
             </div>
-            <div id="homeExamsList">
-              <div class="home-empty">No upcoming exams</div>
-            </div>
+            <div id="homeExamsList" class="home-empty">No upcoming exams</div>
           </div>
 
-          <!-- Project Deadlines Panel -->
           <div class="home-panel">
             <div class="home-panel-head">
               <h3>Project Deadlines</h3>
-              <a class="home-icon-link" href="courses.html" aria-label="View all projects">
+              <a class="home-icon-link" href="courses.html">
                 <i data-lucide="arrow-right"></i>
               </a>
             </div>
-            <div id="homeProjectsList">
-              <div class="home-empty">No project deadlines</div>
-            </div>
+            <div id="homeProjectsList" class="home-empty">No project deadlines</div>
           </div>
 
-          <!-- Today's Tasks Panel -->
           <div class="home-panel">
             <div class="home-panel-head">
               <h3>Today's Tasks</h3>
-              <a class="home-icon-link" href="tasks.html" aria-label="View all tasks">
+              <a class="home-icon-link" href="tasks.html">
                 <i data-lucide="arrow-right"></i>
               </a>
             </div>
-            <div id="homeTodayTasks">
-              <div class="home-empty">No tasks for today</div>
-            </div>
+            <div id="homeTodayTasks" class="home-empty">No tasks for today</div>
           </div>
 
         </section>
 
-        <!-- Study Progress and Timer -->
+        <!-- Chart + Calendar -->
         <section class="home-bottom-row">
 
-          <!-- Study Progress Chart -->
           <div class="progress-card">
             <h3>Study Progress (Last 7 Days)</h3>
             <div class="chart-wrapper">
@@ -130,36 +116,37 @@
             </div>
           </div>
 
-          <!-- Quick Timer -->
-          <div class="timer-card">
-            <h2 class="qt-title">Quick Timer</h2>
+          <div class="calendar-card">
 
-            <div class="qt-body">
-              <!-- ring -->
-              <div class="qt-outer">
-                <div class="qt-inner">
-                  <div id="timer-ring" class="qt-ring"></div>
+            <h3 class="calendar-title">Calendar</h3>
 
-                  <div class="qt-center">
-                    <div id="timer-time" class="qt-time">25:00</div>
-                    <div id="timer-status" class="qt-status">Ready</div>
-                  </div>
-                </div>
+            <div class="calendar-header">
+              <button id="calPrev" type="button">‹</button>
+              <span id="calMonth">Month Year</span>
+              <button id="calNext" type="button">›</button>
+            </div>
+
+            <div class="calendar-grid">
+              <div class="cal-day">Sun</div>
+              <div class="cal-day">Mon</div>
+              <div class="cal-day">Tue</div>
+              <div class="cal-day">Wed</div>
+              <div class="cal-day">Thu</div>
+              <div class="cal-day">Fri</div>
+              <div class="cal-day">Sat</div>
+            </div>
+
+            <div class="calendar-dates" id="calendarDates"></div>
+
+            <div class="cal-events">
+              <div class="cal-events-head">
+                <h4>Events</h4>
               </div>
-
-              <!-- controls -->
-              <div class="qt-controls">
-                <button id="timer-play" class="qt-play" type="button" aria-label="Play/Pause">▶</button>
-                <button id="timer-reset" class="qt-reset" type="button" aria-label="Reset">⟲</button>
-              </div>
-
-              <!-- durations -->
-              <div class="qt-durations">
-                <button id="timer-25" class="qt-chip is-active" type="button">25 min</button>
-                <button id="timer-15" class="qt-chip" type="button">15 min</button>
-                <button id="timer-5" class="qt-chip" type="button">5 min</button>
+              <div id="calEventsList" class="cal-events-list">
+                <div class="cal-events-empty">No events</div>
               </div>
             </div>
+
           </div>
 
         </section>
@@ -169,13 +156,40 @@
 
   </div>
 
+  <!-- Calendar Modal -->
+  <div class="cal-modal" id="calModal" style="display:none;">
+    <div class="cal-modal-box">
+      <div class="cal-modal-head">
+        <h3 id="calModalTitle">Add Note</h3>
+        <button id="calModalClose" type="button" class="cal-x">×</button>
+      </div>
+
+      <div class="cal-modal-body">
+        <label class="cal-label">Title</label>
+        <input id="calEventTitle" class="cal-input" type="text" />
+
+        <label class="cal-label">Note</label>
+        <textarea id="calEventNote" class="cal-input" rows="3"></textarea>
+
+        <div id="calModalMsg" class="cal-msg" style="display:none;"></div>
+      </div>
+
+      <div class="cal-modal-foot">
+        <button id="calSaveEvent" class="cal-btn primary">Save</button>
+        <button id="calCancelEvent" class="cal-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/js/main.js"></script>
+<script src="/js/calendar.js"></script>
+
+
   <script>
-    // Initialize Lucide icons
-    if (window.lucide) {
-      lucide.createIcons();
-    }
+    if (window.lucide) lucide.createIcons();
   </script>
+
 </body>
 </html>

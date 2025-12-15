@@ -813,102 +813,6 @@ async function updateCourseTaskGrade(taskId, gradeValue) {
         alert("Could not connect to the server to update the grade.");
     }
 }
-/* ============================================
-   QUICK TIMER LOGIC
-   ============================================ */
-(function initQuickTimer() {
-  if (!document.body.classList.contains("home-page")) return;
-
-  const timeEl = document.getElementById("timer-time");
-  const statusEl = document.getElementById("timer-status");
-  const ringEl = document.getElementById("timer-ring");
-
-  const btn25 = document.getElementById("timer-25");
-  const btn15 = document.getElementById("timer-15");
-  const btn5 = document.getElementById("timer-5");
-  const btnPlay = document.getElementById("timer-play");
-  const btnReset = document.getElementById("timer-reset");
-
-  if (!timeEl || !statusEl || !ringEl || !btn25 || !btn15 || !btn5 || !btnPlay || !btnReset) return;
-
-  const modes = { "25": 25 * 60, "15": 15 * 60, "5": 5 * 60 };
-  let duration = modes["25"];
-  let remaining = duration;
-  let interval = null;
-  let running = false;
-
-  const fmt = (s) => {
-    const m = String(Math.floor(s / 60)).padStart(2, "0");
-    const ss = String(s % 60).padStart(2, "0");
-    return `${m}:${ss}`;
-  };
-
-  function setActive(btn) {
-    [btn25, btn15, btn5].forEach(b => b.classList.remove("is-active"));
-    btn.classList.add("is-active");
-  }
-
-  function paint() {
-    timeEl.textContent = fmt(remaining);
-    const progress = 1 - (remaining / duration);
-    const deg = Math.max(0, Math.min(360, progress * 360));
-    ringEl.style.background = `conic-gradient(#3b82f6 ${deg}deg, #e5e7eb ${deg}deg)`;
-  }
-
-  function stop() {
-    if (interval) clearInterval(interval);
-    interval = null;
-    running = false;
-    btnPlay.textContent = "▶";
-  }
-
-  function start() {
-    if (running) return;
-    running = true;
-    statusEl.textContent = "Running";
-    btnPlay.textContent = "⏸";
-
-    interval = setInterval(() => {
-      remaining -= 1;
-      if (remaining <= 0) {
-        remaining = 0;
-        paint();
-        stop();
-        statusEl.textContent = "Done!";
-        return;
-      }
-      paint();
-    }, 1000);
-  }
-
-  function reset(toSeconds) {
-    stop();
-    duration = toSeconds ?? duration;
-    remaining = duration;
-    statusEl.textContent = "Ready";
-    paint();
-  }
-
-  // Event listeners
-  btn25.addEventListener("click", () => { setActive(btn25); reset(modes["25"]); });
-  btn15.addEventListener("click", () => { setActive(btn15); reset(modes["15"]); });
-  btn5.addEventListener("click", () => { setActive(btn5); reset(modes["5"]); });
-
-  btnPlay.addEventListener("click", () => {
-    if (running) {
-      stop();
-      statusEl.textContent = "Paused";
-    } else {
-      start();
-    }
-  });
-
-  btnReset.addEventListener("click", () => reset(duration));
-
-  // Initialize
-  setActive(btn25);
-  reset(modes["25"]);
-})();
 
 /* ============================================
    PROGRESS CHART - مع API
@@ -1509,7 +1413,7 @@ const itemHTML = (title, course, due, type) => `
     const bottomRow = document.querySelector(".home-bottom-row");
     
     if (panels) panels.style.display = "grid";
-    if (bottomRow) bottomRow.style.display = "grid";
+    if (bottomRow) bottomRow.style.display = "";
   }
 
   // Event listeners
@@ -1783,4 +1687,6 @@ const itemHTML = (title, course, due, type) => `
       }
     });
   }
+  
 })();
+

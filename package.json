@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,15 @@
   "dependencies": {
     "body-parser": "^2.2.1",
     "express": "^5.2.1",
-    "mongodb": "^7.0.0"
-  }
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lamaIsu/webProject.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lamaIsu/webProject/issues"
+  },
+  "homepage": "https://github.com/lamaIsu/webProject#readme"
 }

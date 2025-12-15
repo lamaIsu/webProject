@@ -1,21 +1,26 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-// Import the controller
-const usersController = require('./Controllers/usersController');
-const tasksController = require('./Controllers/tasksController');
-const coursesController = require('./Controllers/coursesController');
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+const usersController = require("./Controllers/usersController");
+const tasksController = require("./Controllers/tasksController");
+const coursesController = require("./Controllers/coursesController");
+const calendarController = require("./Controllers/calendarController");
+
 const app = express();
 const PORT = 3000;
 
-app.use(express.static('View'));
-// Use body-parser to parse JSON request bodies
+app.use(express.static("View"));
 app.use(bodyParser.json());
 
-// --- RESTful API ROUTES ---
-// Connect the routes to the controller functions
+// ✅ Mongo connect (عدلي اسم الداتابيس لو تبين)
+mongoose
+  .connect("mongodb://127.0.0.1:27017/studease")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log("MongoDB error:", err.message));
 
-// CREATE
-app.post('/api/users', usersController.handleAddUser);
+// --- API ROUTES ---
+app.post("/api/users", usersController.handleAddUser);
 app.post("/api/login", usersController.handleLogin);
 
 app.post("/api/tasks", tasksController.handleCreateTask);
@@ -29,8 +34,12 @@ app.post("/api/course-tasks", coursesController.handleAddCourseTask);
 app.put("/api/course-tasks/:taskId", coursesController.handleUpdateCourseTaskStatus);
 app.put("/api/course-tasks/:taskId/grade", coursesController.handleUpdateCourseTaskGrade);
 
+// ✅ Calendar Notes
+app.get("/api/calendar-notes", calendarController.handleGetNotes);
+app.post("/api/calendar-notes", calendarController.handleCreateNote);
+app.delete("/api/calendar-notes/:id", calendarController.handleDeleteNote);
+app.delete("/api/calendar-notes", calendarController.handleClearAllNotes);
 
-// --- START SERVER ---
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
