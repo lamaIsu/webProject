@@ -1803,8 +1803,91 @@ function initQuickTimer() {
 document.addEventListener('DOMContentLoaded', () => {
     initQuickTimer();
     initFriendsPage(); 
+    initPomodoroInvites()
 });
 
+// pomodoro invites
+function initPomodoroInvites() {
+    const inviteBtn = document.getElementById('inviteFriendsBtn');
+    const dropdown = document.getElementById('friendsDropdown');
+    const listContainer = document.getElementById('pomoFriendsList');
+
+    if (!inviteBtn) return;
+
+    // press invite
+    inviteBtn.addEventListener('click', async () => {
+        const isVisible = dropdown.style.display === 'block';
+        dropdown.style.display = isVisible ? 'none' : 'block';
+
+        if (!isVisible) {
+            await loadFriendsForPomo(listContainer);
+        }
+    });
+
+    // close list
+    document.addEventListener('click', (e) => {
+        if (!inviteBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.display = 'none';
+        }
+    });
+}
+
+// friends list in Pomodoro
+async function loadFriendsForPomo(container) {
+    const userId = localStorage.getItem('userId');
+    if (!userId){
+      container.innerHTML = '<li>Please login first</li>';
+      return;    
+    }
+    container.innerHTML = '<li>Loading...</li>';
+
+    try {
+        const response = await fetch(`/api/friends?userId=${userId}`);
+        const data = await response.json();
+
+        if (data.success && data.friends.length > 0) {
+            container.innerHTML = ''; //delete load message
+            data.friends.forEach(friend => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${friend.name}</span>
+                    <button class="mini-invite-btn" onclick="sendPomoInvite('${friend._id}', this)">Invite</button>
+                `;
+                container.appendChild(li);
+            });
+        } else {
+            container.innerHTML = '<li>No friends found</li>';
+        }
+    } catch (error) {
+        container.innerHTML = '<li>Error loading friends</li>';
+    }
+}
+
+// send invite
+async function sendPomoInvite(friendId, btn) {
+    const originalText = btn.textContent;
+    btn.textContent = '...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/api/session/invite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                friendId: friendId,
+                senderId: localStorage.getItem('userId')
+            }),
+        });
+
+        if (response.ok) {
+            btn.textContent = 'Sent!';
+            btn.style.backgroundColor = '#10b981';
+        }
+    } catch (error) {
+        btn.textContent = 'Err';
+        btn.disabled = false;
+    }
+}
 
 // --------------------------------------------------------
 // ---------------- FRIENDS PAGE ----------------
@@ -1856,7 +1939,7 @@ async function inviteFriendToSession(friendId, friendName, buttonElement) {
     }
 }
 // --------------------------------------------------------
-// 2. MAIN FRIENDS PAGE LOGIC (initFriendsPage)
+// 2. MAIN FRIENDS PAGE (initFriendsPage)
 // --------------------------------------------------------
 
 function initFriendsPage() {
@@ -1877,7 +1960,21 @@ function initFriendsPage() {
     const requestsList = requestsModal ? requestsModal.querySelector('.requests-list') : null;
     const userSearchInput = document.getElementById('userSearchInput');
     const searchResultsList = document.querySelector('.search-results-list');
+    const currentUserId = localStorage.getItem('userId');
     
+
+    async function loadFriends() {
+        try {
+            const res = await fetch(`/api/friends?userId=${currentUserId}`);
+            const data = await res.json();
+            if (data.success) {
+                renderFriends(data.friends); // تمرير البيانات القادمة من السيرفر
+            }
+        } catch (err) { console.error("Error loading friends:", err); }
+    }
+    loadFriends();
+
+
     // friends list
     async function fetchFriendsData() {
         try {
@@ -1967,9 +2064,7 @@ function initFriendsPage() {
         if (!requestsList) return;
         requestsList.innerHTML = '';
 
-        if (pendingRequests.length === 0) {
-            requestsList.innerHTML = '<p class="modal-hint" style="text-align: center;">No pending friend requests.</p>';
-        } else {
+        if (pendingRequests.length > 0) {
             pendingRequests.forEach(request => {
                 const name = request.name || 'Unknown Request';
                 const avatarInitials = name.split(' ').map(n => n[0]).join('');
@@ -1992,6 +2087,7 @@ function initFriendsPage() {
         if (notifDot) {
             notifDot.style.display = pendingRequests.length ? 'block' : 'none';
         }
+        updateRequestUI();
     }
 
 
@@ -2025,11 +2121,35 @@ function initFriendsPage() {
         if (action === 'accept') {
             allFriends.push(request);
         }
+        updateRequestUI()         
         renderRequests();
         renderFriends(allFriends); 
     }
 
+    function updateRequestUI() {
+    const notifDot = document.getElementById('notifDot');
+    const countText = document.getElementById('requestCountText');
+    const list = document.getElementById('requestsList');
 
+    const count = pendingRequests.length;
+
+    if (notifDot) {
+        notifDot.style.display = count > 0 ? 'block' : 'none';
+    }
+
+    if (countText) {
+        if (count > 0) {
+            countText.textContent = `You have ${count} pending request${count > 1 ? 's' : ''}.`;
+            countText.style.color = "#8d5f93ff";
+        } else {
+            countText.textContent = "No pending friend requests.";
+            countText.style.color = "#888";
+            if (list) list.innerHTML = ''; 
+        }
+    }
+}
+      
+      
     // search for users
     async function searchNewUsers() {
         if (!userSearchInput || !searchResultsList) return;
@@ -2153,6 +2273,21 @@ function initFriendsPage() {
             }
         });
     }
+
+    //close button
+    document.querySelectorAll('.close-btn').forEach(button => {
+        button.onclick = function() {
+            this.closest('.modal').style.display = "none";
+        }
+    });
+
+    // close when click out of madal
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
     // Invite friend to Session
     if (friendsList) {
         friendsList.addEventListener('click', (e) => {
