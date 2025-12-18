@@ -52,6 +52,8 @@
                         </button>
                     </div>
 
+                    
+
                 </section>
 
                 <section class="friends-list-container" id="friendsListSection">
@@ -73,7 +75,7 @@
 
     <div id="addFriendModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="document.getElementById('addFriendModal').style.display='none'">&times;</span>
+            <span class="close-btn" onclick="document.getElementById('addFriendModal').style.display='none'">&times;</span> 
             <h2>Add New Friend</h2>
             
             <div class="search-container modal-search">
@@ -82,17 +84,7 @@
             </div>
 
             <ul class="list-group search-results-list">
-                <li class="result-item">
-                    <span class="friend-avatar">SM</span>
-                    <span class="friend-name">Sara Mohamed</span>
-                    <button class="btn-primary btn-small">Send Request</button>
-                </li>
-                <li class="result-item">
-                    <span class="friend-avatar">AA</span>
-                    <span class="friend-name">Ali Ahmed</span>
-                    <button class="btn-primary btn-small sent" disabled>Request Sent</button>
-                </li>
-            </ul>
+             </ul>
             
             <p class="modal-hint">Results will appear here after searching.</p>
 
@@ -101,30 +93,13 @@
 
     <div id="requestsModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="document.getElementById('requestsModal').style.display='none'">&times;</span>
+            <span class="close-btn">&times;</span>
             <h2>Friend Requests</h2>
             
-            <ul class="list-group requests-list">
-                <li class="request-item">
-                    <span class="friend-avatar">KA</span>
-                    <span class="friend-name">Khalid Alali</span>
-                    <div class="request-actions">
-                        <button class="btn-accept">Accept</button>
-                        <button class="btn-reject">Reject</button>
-                    </div>
-                </li>
-                
-                <li class="request-item">
-                    <span class="friend-avatar">FN</span>
-                    <span class="friend-name">Fatima Nader</span>
-                    <div class="request-actions">
-                        <button class="btn-accept">Accept</button>
-                        <button class="btn-reject">Reject</button>
-                    </div>
-                </li>
-            </ul>
+            <ul id="requestsList" class="list-group requests-list">
+                </ul>
 
-            <p class="modal-hint">You have 2 pending requests.</p>
+            <p id="requestCountText" class="request-status-text"></p>
         </div>
     </div>
     
