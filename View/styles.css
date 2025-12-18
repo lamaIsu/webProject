@@ -515,7 +515,7 @@ p.lead {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 2000;
 }
 
 .modal-content {
@@ -2654,6 +2654,44 @@ body {
   font-size: 14px;
 }
 
+.friends-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 250px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.friends-dropdown ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.friends-dropdown li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.mini-invite-btn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
 .timer-card {
   background: linear-gradient(135deg, #4a1f80 0%, #6d28d9 100%);
   border: 1px solid #f0f0f2;
@@ -2889,6 +2927,18 @@ body {
 }
 .btn-requests:hover{
   background-color: #e0e0e0;
+}
+
+.notification-dot {
+    position: absolute;
+    top: -4px;
+    right: -4px; 
+    width: 12px;
+    height: 12px;
+    background-color: #cd8cf8;
+    border-radius: 50%;
+    border: 2px solid white; 
+    display: none;
 }
 
 .friends-list-container .section-title {
