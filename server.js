@@ -6,6 +6,8 @@ const usersController = require("./Controllers/usersController");
 const tasksController = require("./Controllers/tasksController");
 const coursesController = require("./Controllers/coursesController");
 const calendarController = require("./Controllers/calendarController");
+const friendsController = require("./Controllers/friendsController");
+const usersModel = require("./Models/Users");
 
 const app = express();
 const PORT = 3000;
@@ -40,26 +42,33 @@ app.post("/api/calendar-notes", calendarController.handleCreateNote);
 app.delete("/api/calendar-notes/:id", calendarController.handleDeleteNote);
 app.delete("/api/calendar-notes", calendarController.handleClearAllNotes);
 
-app.get("/api/friends", (req, res) => {
-    res.json({ success: true, friends: [] }); 
+// Friends page
+app.post("/api/friends/request", friendsController.handleSendRequest);
+app.post("/api/friends/accept", friendsController.handleAcceptRequest);
+app.post("/api/friends/reject", friendsController.handleRejectRequest);
+app.post("/api/session/invite", friendsController.handleInviteToSession);
+
+app.get("/api/friends", async (req, res) => {
+    const userId = req.query.userId;
+    const friends = await usersModel.getFriendsFullData(userId);
+    res.json({ success: true, friends });
 });
 
-app.get("/api/requests", (req, res) => {
-    res.json({ success: true, requests: [] }); 
+app.get("/api/requests", async (req, res) => {
+    const userId = req.query.userId;
+    const requests = await usersModel.getPendingRequests(userId);
+    res.json({ success: true, requests });
 });
 
-app.get("/api/users/search", (req, res) => {
-    const searchTerm = req.query.username; 
-    res.json({ 
-        users: [] 
-    });
+app.get("/api/users/search", async (req, res) => {
+    try {
+        const { username, currentUserId } = req.query;
+        const users = await usersModel.searchUsers(username, currentUserId);
+        res.json({ success: true, users });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Search failed" });
+    }
 });
-
-app.post("/api/session/invite", (req, res) => {
-    const { friendId, sessionId } = req.body;
-    res.json({ success: true, message: "Invitation sent successfully." });
-});
-
 
 
 app.listen(PORT, () => {
