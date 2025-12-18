@@ -309,6 +309,53 @@ async function updateCourseTaskGrade(userId, courseId, taskId, grade) {
     }
 }
 
+
+// Friends page
+async function searchUsers(term, currentUserId) {
+    const collection = db.collection(COLLECTION_NAME);
+    return await collection.find({
+        name: { $regex: term, $options: 'i' },
+        _id: { $ne: new ObjectId(currentUserId) } // استبعاد المستخدم الحالي من البحث
+    }, { projection: { name: 1, email: 1 } }).toArray();
+}
+
+async function sendFriendRequest(senderId, receiverId) {
+    const collection = db.collection(COLLECTION_NAME);
+    return await collection.updateOne(
+        { _id: new ObjectId(receiverId) },
+        { $addToSet: { pendingRequests: { _id: new ObjectId(senderId), createdAt: new Date() } } }
+    );
+}
+
+async function acceptFriend(userId, friendId) {
+    const collection = db.collection(COLLECTION_NAME);
+    const userOid = new ObjectId(userId);
+    const friendOid = new ObjectId(friendId);
+
+    await collection.updateOne({ _id: userOid }, { $pull: { pendingRequests: { _id: friendOid } } });
+    
+    await collection.updateOne({ _id: userOid }, { $addToSet: { friends: friendOid } });
+    await collection.updateOne({ _id: friendOid }, { $addToSet: { friends: userOid } });
+}
+
+async function getFriendsFullData(userId) {
+    const collection = db.collection(COLLECTION_NAME);
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+    if (!user || !user.friends) return [];
+    
+    return await collection.find({ _id: { $in: user.friends } }, { projection: { name: 1 } }).toArray();
+}
+
+async function getPendingRequests(userId) {
+    const collection = db.collection(COLLECTION_NAME);
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+    if (!user || !user.pendingRequests) return [];
+
+    const senderIds = user.pendingRequests.map(r => r._id);
+    return await collection.find({ _id: { $in: senderIds } }, { projection: { name: 1 } }).toArray();
+}
+
+
 module.exports = {
     addUser,
     findUserByEmailAndPass,
@@ -322,5 +369,11 @@ module.exports = {
     getCourseById,
     addCourseTask,
     updateCourseTaskStatus,
-    updateCourseTaskGrade
+    updateCourseTaskGrade,
+    searchUsers,
+    sendFriendRequest,
+    acceptFriend,
+    getFriendsFullData,
+    getPendingRequests,
+
 };
